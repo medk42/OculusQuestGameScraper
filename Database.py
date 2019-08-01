@@ -89,6 +89,11 @@ class DatabaseJSONFile:
         f.close()
         return True
 
+    def drop(self):
+        self.data = {}
+        self.write_file()
+
+
 
 class AddUpdateResult(Enum):
     ADDED = 1
