@@ -94,7 +94,6 @@ class DatabaseJSONFile:
         self.write_file()
 
 
-
 class AddUpdateResult(Enum):
     ADDED = 1
     UPDATED = 2
