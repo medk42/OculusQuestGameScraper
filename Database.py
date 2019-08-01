@@ -5,7 +5,7 @@ from json import JSONDecodeError
 URL = 'url'
 NAME = 'name'
 PRICE = 'price'
-SIZE = 'size'
+RATING = 'rating'
 DESCRIPTION = 'description'
 
 class DatabaseJSONFile:
@@ -25,19 +25,19 @@ class DatabaseJSONFile:
             ret_list.append(self.data[key][URL])
         return ret_list
 
-    def add_update_data(self, url, name, price, size, description):
+    def add_update_data(self, url, name, price, rating, description):
         if not self.read_file():
             return AddUpdateResult.FAILED
         if url not in self.data:
-            self.data[url] = {URL: url, NAME: name, PRICE: price, SIZE: size, DESCRIPTION: description}
+            self.data[url] = {URL: url, NAME: name, PRICE: price, RATING: rating, DESCRIPTION: description}
             if not self.write_file():
                 return AddUpdateResult.FAILED
             result = AddUpdateResult.ADDED
         else:
-            result = self.update(url, name, price, size, description)
+            result = self.update(url, name, price, rating, description)
         return result
 
-    def update(self, url, name, price, size, description):
+    def update(self, url, name, price, rating, description):
         if not self.read_file():
             return AddUpdateResult.FAILED
         result = AddUpdateResult.NOT_UPDATED
@@ -50,9 +50,9 @@ class DatabaseJSONFile:
                 if self.data[url][PRICE] != price:
                     self.data[url][PRICE] = price
                     result = AddUpdateResult.UPDATED
-            if size:
-                if self.data[url][SIZE] != size:
-                    self.data[url][SIZE] = size
+            if rating:
+                if self.data[url][RATING] != rating:
+                    self.data[url][RATING] = rating
                     result = AddUpdateResult.UPDATED
             if description:
                 if self.data[url][DESCRIPTION] != description:

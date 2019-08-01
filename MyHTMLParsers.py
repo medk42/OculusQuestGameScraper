@@ -1,4 +1,5 @@
 from html.parser import HTMLParser
+from GameData import GameData
 import json
 
 
@@ -32,9 +33,40 @@ class GameListHTMLParser(HTMLParser):
             self.returnElements.append(element['url'])
 
     def feed(self, contents):
+        """
+        :param contents: HTML file
+        :return: List of available game URLs
+        """
         super().feed(contents)
         return self.returnElements
 
     def error(self, message):
         if self.verbose:
             print('Error:', message)
+
+
+class GamePageHTMLParser(GameListHTMLParser):
+    def __init__(self, verbose, game_url):
+        self.game_url = game_url
+        super().__init__(verbose)
+
+    def handle_data(self, data):
+        if self.reading:
+            self.decode_json(data)
+
+    def decode_json(self, text):
+        data = json.loads(text)
+        name = data['name']
+        description = data['description']
+        price = data['offers']['price']
+        rating = data['aggregateRating']['ratingValue']
+        url = self.game_url
+        self.returnElements = GameData(url, name, price, rating, description)
+
+    def feed(self, contents):
+        """
+        :param contents: HTML file
+        :return: GameData object containing data parsed from a given HTML
+        """
+        super().feed(contents)
+        return self.returnElements
