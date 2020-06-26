@@ -12,7 +12,7 @@ class GameListHTMLParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         if tag == 'script':
-            if len(attrs) == 1 and attrs[0][0] == 'type' and attrs[0][1] == 'application/ld+json':
+            if len(attrs) == 2 and attrs[0][0] == 'type' and attrs[0][1] == 'application/ld+json':
                 if self.verbose:
                     print("Start reading:", tag)
                 self.reading = True
